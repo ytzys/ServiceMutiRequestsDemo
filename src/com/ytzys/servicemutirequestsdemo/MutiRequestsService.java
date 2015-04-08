@@ -10,14 +10,14 @@ import android.util.Log;
  * 
  * @author ytzys
  * 
- *         ¿ÉÍ¬Ê±½ÓÊÕ¶à¸öÇëÇó£¬µ«Ö»ÔÚfinish()·½·¨ÖĞ¶Ô×îºóÒ»´ÎÇëÇó×öÊÕÎ²¹¤×÷¡£
- *         Ó¦ÓÃ³¡¾°±ÈÈç£º¶à¸ö×Ó½ÚÄ¿¶¼ĞèÒªÏÖÆÆ½âÔÙ²¥·Å£¬µ±¶à´Îµã»÷Ê±£¬Ö»²¥·Å×îºóÒ»´Îµã»÷µÄ½ÚÄ¿
+ *         å¯åŒæ—¶æ¥æ”¶å¤šä¸ªè¯·æ±‚ï¼Œä½†åªåœ¨finish()æ–¹æ³•ä¸­å¯¹æœ€åä¸€æ¬¡è¯·æ±‚åšæ”¶å°¾å·¥ä½œã€‚
+ *         åº”ç”¨åœºæ™¯æ¯”å¦‚ï¼šå¤šä¸ªå­èŠ‚ç›®éƒ½éœ€è¦ç°ç ´è§£å†æ’­æ”¾ï¼Œå½“å¤šæ¬¡ç‚¹å‡»æ—¶ï¼Œåªæ’­æ”¾æœ€åä¸€æ¬¡ç‚¹å‡»çš„èŠ‚ç›®
  * 
  */
 public class MutiRequestsService extends Service {
 
 	private int programId;
-	private int subId; // ±ê¼Çµ±Ç°ÎªÄÄ¸ö×Ó½ÚÄ¿·şÎñ£¬¶à´ÎÇëÇóÊ±¼ÇÂ¼×îºóÒ»´Îµ÷ÓÃµÄ×Ô½ÚÄ¿id
+	private int subId; // æ ‡è®°å½“å‰ä¸ºå“ªä¸ªå­èŠ‚ç›®æœåŠ¡ï¼Œå¤šæ¬¡è¯·æ±‚æ—¶è®°å½•æœ€åä¸€æ¬¡è°ƒç”¨çš„è‡ªèŠ‚ç›®id
 	public static final int START_SERVICE = 1;
 	public static final int STOP_SERVICE = 2;
 	private static final String TAG = "MutiRequstsService";
@@ -48,12 +48,12 @@ public class MutiRequestsService extends Service {
 			programId = intent.getIntExtra("programId", 0);
 			subId = intent.getIntExtra("subId", 0);
 
-			// ÔËĞĞ´¦ÀíÏß³Ì
+			// è¿è¡Œå¤„ç†çº¿ç¨‹
 			new HndleThread(this, subId).start();
 			break;
 		case STOP_SERVICE:
 			Log.i(TAG, "STOP_SERVICE, programId:" + programId);
-			stopSelf(startId);
+			stopSelf();
 			break;
 		default:
 			break;
@@ -61,10 +61,10 @@ public class MutiRequestsService extends Service {
 		return super.onStartCommand(intent, flags, startId);
 	}
 
-	// ´¦Àí½áÊøÊ±µ÷ÓÃ£¬×öÊÕÎ²¹¤×÷£¬Èç²¥·ÅÏàÓ¦µÄ×Ó½ÚÄ¿
+	// å¤„ç†ç»“æŸæ—¶è°ƒç”¨ï¼Œåšæ”¶å°¾å·¥ä½œï¼Œå¦‚æ’­æ”¾ç›¸åº”çš„å­èŠ‚ç›®
 	private void finish(int id) {
 
-		// Óë×îºóÒ»´ÎÇëÇóµÄ×Ó½ÚÄ¿idÏàÍ¬
+		// ä¸æœ€åä¸€æ¬¡è¯·æ±‚çš„å­èŠ‚ç›®idç›¸åŒ
 		if (subId == id) {
 			Log.i(TAG, "finish(), subId:" + subId);
 			Intent intent = new Intent("finish");
@@ -73,7 +73,7 @@ public class MutiRequestsService extends Service {
 		}
 	}
 
-	// ´¦ÀíÏß³Ì£¬Ìá¹©¾ßÌåµÄ·şÎñ
+	// å¤„ç†çº¿ç¨‹ï¼Œæä¾›å…·ä½“çš„æœåŠ¡
 	class HndleThread extends Thread {
 		MutiRequestsService service;
 		int subId;

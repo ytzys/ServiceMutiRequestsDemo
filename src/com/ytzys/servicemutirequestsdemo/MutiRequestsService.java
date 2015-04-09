@@ -1,7 +1,6 @@
 package com.ytzys.servicemutirequestsdemo;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -44,9 +43,10 @@ public class MutiRequestsService extends Service {
 		int action = intent.getIntExtra("action", 0);
 		switch (action) {
 		case START_SERVICE:
-			Log.i(TAG, "START_SERVICE");
 			programId = intent.getIntExtra("programId", 0);
 			subId = intent.getIntExtra("subId", 0);
+			Log.i(TAG, "START_SERVICE, programId:" + programId + ", subId:"
+					+ subId);
 
 			// 运行处理线程
 			new HndleThread(this, subId).start();
@@ -64,7 +64,7 @@ public class MutiRequestsService extends Service {
 	// 处理结束时调用，做收尾工作，如播放相应的子节目
 	private void finish(int id) {
 
-		// 与最后一次请求的子节目id相同
+		// 判断是否与最后一次请求的子节目id相同
 		if (subId == id) {
 			Log.i(TAG, "finish(), subId:" + subId);
 			Intent intent = new Intent("finish");
@@ -85,10 +85,12 @@ public class MutiRequestsService extends Service {
 
 		public void run() {
 			try {
-				sleep(3000);
 				/**
 				 * handling process
 				 * */
+				sleep(3000);
+
+				// 处理结束后回调
 				service.finish(subId);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

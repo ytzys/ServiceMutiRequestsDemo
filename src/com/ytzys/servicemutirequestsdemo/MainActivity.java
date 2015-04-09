@@ -17,9 +17,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView textView;
 	private Button button1;
 	private Button button2;
-	public static int initValue = 8;
-	int programId = initValue;
-	int subId = -1;
+	public static int initValue = 8; // 代表综艺类节目
+	private int programId = initValue;
+	private int subId = -1;
+	private String program1 = "奔跑吧兄弟"; // subId为1
+	private String program2 = "我是歌手"; // subId为2
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +38,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		textView = (TextView) findViewById(R.id.text);
 		button1 = (Button) findViewById(R.id.button1);
 		button2 = (Button) findViewById(R.id.button2);
-		button1.setText("program 1");
-		button2.setText("program 2");
+		button1.setText(program1);
+		button2.setText(program2);
 		button1.setOnClickListener(this);
 		button2.setOnClickListener(this);
 
@@ -55,13 +57,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.button1:
-			textView.setText("button1 clicked");
 			subId = 1;
 			stopMutiRequestService();
 			startMutiRequestService(programId, subId);
 			break;
 		case R.id.button2:
-			textView.setText("button2 clicked");
 			subId = 2;
 			stopMutiRequestService();
 			startMutiRequestService(programId, subId);
@@ -90,6 +90,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		stopMutiRequestService();
+		unregisterReceiver(receiver);
 		super.onDestroy();
 	}
 
@@ -99,9 +100,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals("finish")) {
 				if (intent.getIntExtra("subId", 0) == 1) {
-					textView.setText("serve program 1");
+					textView.setText(program1 + "播放");
 				} else {
-					textView.setText("serve program 2");
+					textView.setText(program2 + "播放");
 
 				}
 			}

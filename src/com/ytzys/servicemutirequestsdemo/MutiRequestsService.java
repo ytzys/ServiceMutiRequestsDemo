@@ -53,7 +53,7 @@ public class MutiRequestsService extends Service {
 			break;
 		case STOP_SERVICE:
 			Log.i(TAG, "STOP_SERVICE, programId:" + programId);
-			stopSelf();
+			stopSelf(startId);
 			break;
 		default:
 			break;
